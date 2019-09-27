@@ -1,0 +1,29 @@
+Name      TRS-80-Arduino;
+Partno    ATF16V8B;
+Date      09/18/2019;
+Rev       01;
+Designer  AP;
+Company   SFSU;
+Assembly  None;
+Location  None;
+Device    g16v8a;
+
+/* Inputs  */
+Pin [2..9] = [A7..0];
+Pin 17  =  !RD_N;
+Pin 18  =  !WR_N;
+Pin 19  =  !IORQ_N;
+
+/* Outputs */
+Pin 14  =  EXTIO_SEL;
+Pin 13  =  !ARDUINO_SEL_N;
+
+/* Equations */
+io_bus_sel = IORQ_N & (RD_N # WR_N);
+
+/* Arduino is selected at port 31 */
+arduino_sel = !A7 & !A6 & !A5 & A4 & A3 & A2 & A1 & A0 & io_bus_sel;
+ARDUINO_SEL_N = arduino_sel;
+
+/* EXTIO_SEL_N allows the TRS-80 to read */
+EXTIO_SEL = arduino_sel & RD_N;
